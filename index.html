@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Dragón</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav>
+            <div class="navbar">
+                <a href="./index.html" class="logo">Tienda Dragón</a>
+                <ul class="nav-links">
+                    <li><a href="./index.html" class="active">Home</a></li>
+                    <li><a href="./cat1.html">Artículos de indumentaria</a></li>
+                    <li><a href="./cat2.html">Artículos de entrenamiento</a></li>
+                    <li><a href="./cat3.html">Artículos consumibles</a></li>
+                    <li><a href="./login.html" class="logout-btn">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="hero-section">
+            <h1 class="hero-title">Tienda Dragón</h1>
+            <p class="hero-subtitle">Tu destino para productos de calidad y estilo único</p>
+        </section>
+
+        <section class="categories-grid">
+            <div class="category-card" onclick="window.location.href='cat1.html'">
+                <div class="category-icon">👕</div>
+                <h3 class="category-title">Artículos de indumentaria</h3>
+                <p class="category-description">Descubre nuestra colección de ropa y accesorios</p>
+            </div>
+
+            <div class="category-card" onclick="window.location.href='cat2.html'">
+                <div class="category-icon">🏋️</div>
+                <h3 class="category-title">Artículos de entrenamiento</h3>
+                <p class="category-description">Equipamiento para tu rutina de ejercicios</p>
+            </div>
+
+            <div class="category-card" onclick="window.location.href='cat3.html'">
+                <div class="category-icon">🥤</div>
+                <h3 class="category-title">Artículos consumibles</h3>
+                <p class="category-description">Suplementos y productos para tu bienestar</p>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2 class="cta-title">¡Bienvenido a Tienda Dragón!</h2>
+            <p class="cta-text">Explora nuestras categorías y encuentra exactamente lo que necesitas</p>
+            <a href="#" class="cta-button">Comenzar a Comprar</a>
+        </section>
+    </main>
+</body>
+</html>
