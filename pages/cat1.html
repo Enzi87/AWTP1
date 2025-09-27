@@ -1,66 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda Dragón - Artículos de indumentaria</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
-<body>
+<body class="bg-light">
+
     <!-- Navbar -->
-    <header>
-        <nav>
-            <div class="navbar">
-                <a href="../index.html" class="logo">Tienda Dragón</a>
-                <ul class="nav-links">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="cat1.html" class="active">Indumentaria</a></li>
-                    <li><a href="cat2.html">Entrenamiento</a></li>
-                    <li><a href="cat3.html">Consumibles</a></li>
-                    <li><a href="aboutus.html">Acerca de</a></li>
-                    <li><a href="login.html" class="logout-btn">Logout</a></li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Tienda Dragón</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="cat1.html">Indumentaria</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cat2.html">Entrenamiento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cat3.html">Consumibles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="aboutus.html">Acerca de</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="login.html">Logout</a></li>
                 </ul>
             </div>
-        </nav>
-    </header>
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="page-header">
-            <h1 class="page-title">Artículos de indumentaria</h1>
-            <p class="page-subtitle">Equipamiento de combate y entrenamiento de la más alta calidad</p>
         </div>
-        <div class="products-grid">
-            <!-- Producto 1: Armadura Flexible -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images\armadura-flexible.jpg" alt="Armadura Flexible">
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5" style="margin-top: 76px;">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Artículos de indumentaria</h1>
+            <p class="text-white">Equipamiento de combate y entrenamiento de la más alta calidad</p>
+        </div>
+
+        <!-- Grid de productos -->
+        <div class="row g-4">
+            <!-- Producto 1 -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="../images/armadura-flexible.jpg" class="card-img-top" alt="Armadura Flexible">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Armadura Flexible</h5>
+                        <p class="card-text">Protección avanzada con máxima movilidad. Ideal para combate y entrenamiento intensivo.</p>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-success">$299.99</p>
+                            <button class="btn btn-primary w-100">Agregar al Carrito</button>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="product-title">Armadura Flexible</h3>
-                <p class="product-description">Protección avanzada con máxima movilidad. Ideal para combate y entrenamiento intensivo.</p>
-                <div class="product-price">$299.99</div>
-                <button class="product-button">Agregar al Carrito</button>
             </div>
-            <!-- Producto 2: Gi de Escuela Tortuga -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/gi-escuela-tortuga.jpg" alt="Gi de Escuela Tortuga">
+            <!-- Producto 2 -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="../images/gi-escuela-tortuga.jpg" class="card-img-top" alt="Gi de Escuela Tortuga">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Gi de Escuela Tortuga</h5>
+                        <p class="card-text">Uniforme tradicional de la prestigiosa Escuela Tortuga. Confeccionado con materiales premium.</p>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-success">$179.99</p>
+                            <button class="btn btn-primary w-100">Agregar al Carrito</button>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="product-title">Gi de Escuela Tortuga</h3>
-                <p class="product-description">Uniforme tradicional de la prestigiosa Escuela Tortuga. Confeccionado con materiales premium.</p>
-                <div class="product-price">$179.99</div>
-                <button class="product-button">Agregar al Carrito</button>
             </div>
-            <!-- Producto 3: Gi Básico -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/gi-basico.jpg" alt="Gi Básico">
+            <!-- Producto 3 -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="../images/gi-basico.jpg" class="card-img-top" alt="Gi Básico">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Gi Básico</h5>
+                        <p class="card-text">Uniforme clásico para principiantes. Cómodo, duradero y perfecto para entrenamientos diarios.</p>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-success">$89.99</p>
+                            <button class="btn btn-primary w-100">Agregar al Carrito</button>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="product-title">Gi Básico</h3>
-                <p class="product-description">Uniforme clásico para principiantes. Cómodo, duradero y perfecto para entrenamientos diarios.</p>
-                <div class="product-price">$89.99</div>
-                <button class="product-button">Agregar al Carrito</button>
             </div>
         </div>
     </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
