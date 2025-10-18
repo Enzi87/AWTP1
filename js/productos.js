@@ -1,81 +1,72 @@
 // =====================
-// ESTRUCTURA DE DATOS DE PRODUCTOS
+// VARIABLES GLOBALES
 // =====================
+let todosLosProductos = [];
 
-const productosIndumentaria = [
-    {
-        id: 1,
-        nombre: 'Armadura Flexible',
-        descripcion: 'Protección avanzada con máxima movilidad. Ideal para combate y entrenamiento intensivo.',
-        precio: 299.99,
-        imagen: '../images/armadura-flexible.jpg'
-    },
-    {
-        id: 2,
-        nombre: 'Gi de Escuela Tortuga',
-        descripcion: 'Uniforme tradicional de la prestigiosa Escuela Tortuga. Confeccionado con materiales premium.',
-        precio: 179.99,
-        imagen: '../images/gi-escuela-tortuga.jpg'
-    },
-    {
-        id: 3,
-        nombre: 'Gi Básico',
-        descripcion: 'Uniforme clásico para principiantes. Cómodo, duradero y perfecto para entrenamientos diarios.',
-        precio: 89.99,
-        imagen: '../images/gi-basico.jpg'
+// =====================
+// FUNCIÓN PARA CARGAR PRODUCTOS DESDE JSON
+// =====================
+async function cargarProductos() {
+    try {
+        const response = await fetch('../data/productos.json');
+        
+        if (!response.ok) {
+            throw new Error('Error al cargar los productos');
+        }
+        
+        const data = await response.json();
+        todosLosProductos = data.productos;
+        
+        return todosLosProductos;
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudieron cargar los productos. Por favor, recarga la página.');
+        return [];
     }
-];
+}
 
-const productosEntrenamiento = [
-    {
-        id: 4,
-        nombre: 'Pesas de Gravedad',
-        descripcion: 'Pesas de gravedad con regulador de peso. Ideal para entrenamiento intensivo.',
-        precio: 29.99,
-        imagen: '../images/pesas-de-gravedad.jpg'
-    },
-    {
-        id: 5,
-        nombre: 'Caparazón de Escuela Tortuga',
-        descripcion: 'Caparazón de 20 kg tradicional de la prestigiosa Escuela Tortuga. Confeccionado con materiales premium.',
-        precio: 129.99,
-        imagen: '../images/caparazon-tortuga.jpg'
-    },
-    {
-        id: 6,
-        nombre: 'Medidor de Impacto',
-        descripcion: 'Máquina medidora de fuerza de impacto. Perfecta para llevar un registro de la evolución del usuario.',
-        precio: 249.99,
-        imagen: '../images/medidor-de-impacto.jpg'
-    }
-];
+// =====================
+// FUNCIÓN PARA OBTENER PRODUCTOS POR CATEGORÍA
+// =====================
+function obtenerProductosPorCategoria(categoria) {
+    return todosLosProductos.filter(producto => producto.categoria === categoria);
+}
 
-const productosConsumibles = [
-    {
-        id: 7,
-        nombre: 'Senzu',
-        descripcion: 'Semillas del Ermitaño. Restauran al instante toda tu energía y te permiten sobrevivir hasta diez días sin necesidad de comer.',
-        precio: 49.99,
-        imagen: '../images/senzu.jpg'
-    },
-    {
-        id: 8,
-        nombre: 'Suplementos de Kaiō',
-        descripcion: 'Suplementos de Kaiō. Aumentan temporalmente tu fuerza y concentración, potenciando al máximo tu entrenamiento bajo la gravedad del planeta del Gran Kaiō.',
-        precio: 79.99,
-        imagen: '../images/suplementos-kaio.jpg'
-    }
-];
+// =====================
+// FUNCIÓN PARA OBTENER PRODUCTOS DESTACADOS
+// =====================
+function obtenerProductosDestacados(limite = null) {
+    const destacados = todosLosProductos.filter(producto => producto.destacado);
+    return limite ? destacados.slice(0, limite) : destacados;
+}
+
+// =====================
+// FUNCIÓN PARA OBTENER PRODUCTOS DESTACADOS POR CATEGORÍA
+// =====================
+function obtenerDestacadosPorCategoria(limite = 2) {
+    const categorias = ['indumentaria', 'entrenamiento', 'consumibles'];
+    const resultado = [];
+    
+    categorias.forEach(categoria => {
+        const productosCategoria = todosLosProductos
+            .filter(p => p.categoria === categoria)
+            .sort((a, b) => b.precio - a.precio) // Ordenar por precio descendente
+            .slice(0, limite);
+        
+        resultado.push(...productosCategoria);
+    });
+    
+    return resultado;
+}
 
 // =====================
 // FUNCIÓN PARA CREAR UNA CARD DE PRODUCTO
 // =====================
-
 function crearCardProducto(producto) {
     return `
         <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-                <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+                <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" style="height: 250px; object-fit: cover;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${producto.nombre}</h5>
                     <p class="card-text">${producto.descripcion}</p>
@@ -104,10 +95,9 @@ function crearCardProducto(producto) {
 }
 
 // =====================
-// FUNCIÓN PARA RENDERIZAR PRODUCTOS
+// FUNCIÓN PARA RENDERIZAR PRODUCTOS POR CATEGORÍA
 // =====================
-
-function renderizarProductos(categoria) {
+async function renderizarProductos(categoria) {
     const contenedor = document.getElementById('productos-container');
     
     if (!contenedor) {
@@ -115,22 +105,57 @@ function renderizarProductos(categoria) {
         return;
     }
     
-    let productos = [];
+    // Mostrar mensaje de carga
+    contenedor.innerHTML = '<div class="col-12 text-center"><p class="text-white">Cargando productos...</p></div>';
     
-    // Seleccionar los productos según la categoría
-    switch(categoria) {
-        case 'indumentaria':
-            productos = productosIndumentaria;
-            break;
-        case 'entrenamiento':
-            productos = productosEntrenamiento;
-            break;
-        case 'consumibles':
-            productos = productosConsumibles;
-            break;
-        default:
-            console.error('Categoría no válida');
-            return;
+    // Cargar productos si aún no están cargados
+    if (todosLosProductos.length === 0) {
+        await cargarProductos();
+    }
+    
+    // Obtener productos de la categoría
+    const productos = obtenerProductosPorCategoria(categoria);
+    
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<div class="col-12 text-center"><p class="text-white">No hay productos disponibles en esta categoría.</p></div>';
+        return;
+    }
+    
+    // Generar las cards
+    let productosHTML = '';
+    productos.forEach(producto => {
+        productosHTML += crearCardProducto(producto);
+    });
+    
+    // Insertar en el contenedor
+    contenedor.innerHTML = productosHTML;
+}
+
+// =====================
+// FUNCIÓN PARA RENDERIZAR PRODUCTOS DESTACADOS (PARA HOME)
+// =====================
+async function renderizarProductosDestacados(contenedorId = 'productos-destacados', limite = 2) {
+    const contenedor = document.getElementById(contenedorId);
+    
+    if (!contenedor) {
+        console.error('No se encontró el contenedor de productos destacados');
+        return;
+    }
+    
+    // Mostrar mensaje de carga
+    contenedor.innerHTML = '<div class="col-12 text-center"><p class="text-white">Cargando productos destacados...</p></div>';
+    
+    // Cargar productos si aún no están cargados
+    if (todosLosProductos.length === 0) {
+        await cargarProductos();
+    }
+    
+    // Obtener productos destacados por categoría
+    const productos = obtenerDestacadosPorCategoria(limite);
+    
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<div class="col-12 text-center"><p class="text-white">No hay productos destacados disponibles.</p></div>';
+        return;
     }
     
     // Generar las cards
@@ -179,9 +204,17 @@ function cambiarCantidad(productoId, cambio) {
 function agregarAlCarrito(productoId) {
     const cantidad = cantidades[productoId] || 1;
     
+    // Buscar el producto
+    const producto = todosLosProductos.find(p => p.id === productoId);
+    
+    if (!producto) {
+        alert('Producto no encontrado');
+        return;
+    }
+    
     // Aquí iría la lógica real del carrito
     // Por ahora solo mostramos un mensaje
-    alert(`Producto agregado al carrito!\nCantidad: ${cantidad}`);
+    alert(`✅ ${producto.nombre}\nCantidad: ${cantidad}\nTotal: $${(producto.precio * cantidad).toFixed(2)}`);
     
     // Resetear la cantidad después de agregar
     cantidades[productoId] = 1;
