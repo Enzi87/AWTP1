@@ -14,6 +14,7 @@ function obtenerRutasNavbar() {
             cat2: './cat2.html',
             cat3: './cat3.html',
             aboutus: './aboutus.html',
+            carrito: './carrito.html', // AGREGAR ESTA LÍNEA
             login: './login.html'
         };
     } else {
@@ -24,6 +25,7 @@ function obtenerRutasNavbar() {
             cat2: './pages/cat2.html',
             cat3: './pages/cat3.html',
             aboutus: './pages/aboutus.html',
+            carrito: './pages/carrito.html', // AGREGAR ESTA LÍNEA
             login: './pages/login.html'
         };
     }
@@ -47,6 +49,11 @@ function obtenerPaginasNav() {
 // =====================
 // FUNCIÓN PARA GENERAR EL NAVBAR
 // =====================
+/**
+ * Genera dinámicamente el contenido del navbar
+ * Adapta los enlaces según si el usuario está logueado o no
+ * @param {String} paginaActiva - Nombre de la página actual para resaltarla
+ */
 function generarNavbar(paginaActiva) {
     // Obtener el contenedor del navbar
     const navbarContainer = document.getElementById('navbarNav');
@@ -59,6 +66,10 @@ function generarNavbar(paginaActiva) {
     // Obtener las páginas con rutas correctas
     const paginasNav = obtenerPaginasNav();
     const rutas = obtenerRutasNavbar();
+    
+    // Verificar si el usuario está logueado
+    const usuario = obtenerUsuarioActual();
+    const estaLogueado = usuario !== null;
     
     // Crear la lista de navegación
     let navbarHTML = '<ul class="navbar-nav ms-auto">';
@@ -73,12 +84,44 @@ function generarNavbar(paginaActiva) {
         `;
     });
     
-    // Agregar el botón de logout
-    navbarHTML += `
-        <li class="nav-item">
-            <a class="btn btn-outline-warning ms-2" href="${rutas.login}" onclick="return confirmarLogout()">Logout</a>
-        </li>
-    `;
+    // Agregar el botón del carrito SOLO si está logueado
+    if (estaLogueado) {
+        navbarHTML += `
+            <li class="nav-item">
+                <a class="nav-link position-relative" href="${rutas.carrito}" title="Ver carrito">
+                    🛒 Carrito
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" 
+                          id="carrito-contador">
+                        0
+                    </span>
+                </a>
+            </li>
+        `;
+        
+        // Extraer el nombre de usuario del email (antes del @)
+        const nombreUsuario = usuario.email.split('@')[0];
+        
+        // Mostrar nombre del usuario
+        navbarHTML += `
+            <li class="nav-item d-flex align-items-center">
+                <span class="text-white me-2" id="navbar-usuario">👤 ${nombreUsuario}</span>
+            </li>
+        `;
+        
+        // Botón de Logout
+        navbarHTML += `
+            <li class="nav-item">
+                <a class="btn btn-outline-warning ms-2" href="#" onclick="return confirmarLogout()">Logout</a>
+            </li>
+        `;
+    } else {
+        // Botón de Login (cuando NO está logueado)
+        navbarHTML += `
+            <li class="nav-item">
+                <a class="btn btn-outline-success ms-2" href="${rutas.login}">Login</a>
+            </li>
+        `;
+    }
     
     navbarHTML += '</ul>';
     
@@ -86,17 +129,36 @@ function generarNavbar(paginaActiva) {
     navbarContainer.innerHTML = navbarHTML;
 }
 
+/**
+ * Obtiene el usuario actual desde sessionStorage
+ * @returns {Object|null} Datos del usuario o null si no hay sesión
+ */
+function obtenerUsuarioActual() {
+    const usuarioJSON = sessionStorage.getItem('usuario');
+    return usuarioJSON ? JSON.parse(usuarioJSON) : null;
+}
+
 // =====================
 // FUNCIÓN PARA CONFIRMAR LOGOUT
 // =====================
+/**
+ * Muestra confirmación antes de cerrar sesión
+ * Llama a la función cerrarSesion() de validacion.js
+ * @returns {Boolean} false para prevenir navegación del enlace
+ */
 function confirmarLogout() {
-    return confirm('¿Estás seguro que deseas cerrar sesión?');
+    if (confirm('¿Estás seguro que deseas cerrar sesión?\n\nSe eliminará tu carrito de compras.')) {
+        cerrarSesion(); // Esta función está en validacion.js
+    }
+    return false; // Prevenir navegación del enlace
 }
 
 // =====================
 // INICIALIZAR NAVBAR AUTOMÁTICAMENTE
 // =====================
-// Esta función se ejecuta cuando el DOM está listo
+/**
+ * Detecta la página actual y genera el navbar cuando el DOM está listo
+ */
 document.addEventListener('DOMContentLoaded', function() {
     // Detectar la página actual basándose en el título o URL
     const pageTitle = document.querySelector('title').textContent;
